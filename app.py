@@ -5,8 +5,8 @@ from supabase import create_client, Client
 app = Flask(__name__)
 
 # ⚠️ ეს ორი ხაზი შეავსე Supabase-დან აღებული მონაცემებით ⚠️
-SUPABASE_URL = "https://buqmhyvcxakfkjcgkxbt.supabase.co"
-SUPABASE_KEY = "sb_publishable_rqhL4LH1pTJISNLVaTFIYQ_d8GOp9S7"
+SUPABASE_URL = "https://buqmhyvcxakfkjcgkxbt.supabase.c0"
+SUPABASE_KEY = "sb_publishable_aBu2Sj2ZEp_Q2RZ5H7G63A_Ed460CwV"
 # ვუკავშირდებით ბაზას
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
