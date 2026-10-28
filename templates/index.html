@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Store - robuxs</title>
+    <style>
+        /* ზოგადი სტილები */
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* ზედა ნავიგაცია */
+        .navbar {
+            width: 100%;
+            background-color: #1a1a1a;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            border-bottom: 1px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 22px;
+            color: #d4ff3f;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: #a0a0a0; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: #d4ff3f; }
+
+        .user-info {
+            display: flex; align-items: center; gap: 20px; font-size: 14px;
+            background: #222; padding: 8px 20px; border-radius: 25px;
+            border: 1px solid #333; font-weight: 600;
+        }
+
+        .robux-count { color: #d4ff3f; display: flex; align-items: center; gap: 5px; }
+
+        /* მთავარი კონტენტი */
+        .main-container { max-width: 900px; width: 100%; padding: 60px 20px; text-align: center; box-sizing: border-box; }
+
+        h1 {
+            font-size: 48px; font-weight: 800; margin-bottom: 15px; line-height: 1.2;
+            background: linear-gradient(90deg, #ffffff, #d4ff3f);
+            background-clip: text; /* 👈 აი ეს დაემატა */
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle { color: #888; margin-bottom: 50px; font-size: 18px; }
+
+        /* ბარათების სტილი */
+        .card-container { display: flex; flex-direction: column; gap: 15px; text-align: left; }
+
+        .card {
+            background-color: #1e1e1e; border-radius: 12px; padding: 20px 30px;
+            display: flex; align-items: center; justify-content: space-between;
+            border: 1px solid #2a2a2a; transition: transform 0.2s, border-color 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .card:hover { transform: translateY(-2px); border-color: #d4ff3f; }
+
+        .robux-amount { font-size: 20px; font-weight: bold; width: 150px; color: #d4ff3f; display: flex; align-items: center; gap: 8px; }
+        .price-tag { font-size: 18px; font-weight: bold; color: #fff; }
+
+        /* ყიდვის ღილაკი */
+        .btn-buy {
+            background-color: #d4ff3f; color: #000; border: none; padding: 10px 25px;
+            border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn-buy:hover { background-color: #bce630; }
+        .btn-buy:active { transform: scale(0.95); }
+
+        /* მოდალური ფანჯარა */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); z-index: 1000;
+            justify-content: center; align-items: center; backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #1e1e1e; padding: 40px 30px; border-radius: 12px;
+            width: 100%; max-width: 400px; border: 1px solid #444; text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8); position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .modal-content h2 { margin-top: 0; color: #d4ff3f; font-size: 24px; }
+        .modal-content p { color: #aaa; font-size: 14px; margin-bottom: 25px; }
+
+        .modal-input {
+            width: 100%; padding: 14px; margin-bottom: 15px; background-color: #2a2a2a;
+            border: 1px solid #444; border-radius: 8px; color: #fff; box-sizing: border-box;
+            outline: none; font-size: 14px; transition: border-color 0.2s;
+        }
+        .modal-input:focus { border-color: #d4ff3f; }
+
+        .modal-btn {
+            width: 100%; padding: 14px; background-color: #d4ff3f; color: #000;
+            border: none; border-radius: 8px; font-weight: bold; font-size: 16px;
+            cursor: pointer; transition: background 0.2s; margin-top: 10px;
+        }
+        .modal-btn:hover { background-color: #bce630; }
+
+        .close-btn {
+            position: absolute; top: 15px; right: 20px; color: #888;
+            font-size: 28px; cursor: pointer; background: none; border: none; line-height: 1;
+        }
+        .close-btn:hover { color: #fff; }
+
+        /* ფუტერი */
+        .footer { width: 100%; max-width: 900px; margin-top: 60px; padding-bottom: 30px; font-size: 12px; color: #555; border-top: 1px solid #222; padding-top: 30px; }
+        .footer-links { display: flex; gap: 25px; margin-bottom: 20px; color: #888; flex-wrap: wrap; justify-content: center; }
+        .footer-links a { color: #888; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <!-- ნავიგაცია -->
+    <div class="navbar">
+        <div class="logo">NEXUS</div>
+        <div class="nav-links">
+            <a href="#">მაღაზია</a>
+            <a href="#">ბიბლიოთეკა</a>
+            <a href="#">შექმნა</a>
+        </div>
+        <div class="user-info">
+            <span>👤 @მომხმარებელი</span>
+            <span class="robux-count">🪙 0</span> 
+            <span>💵 $25.00</span>
+        </div>
+    </div>
+
+    <!-- მთავარი კონტენტი -->
+    <div class="main-container">
+        <h1>შეიძინე რობუქსები<br>სწრაფად და იაფად</h1>
+        <p class="subtitle">აირჩიე სასურველი პაკეტი და მიიღე ბონუსები</p>
+
+        <div class="card-container">
+            <!-- 5000 Robux - 8$ -->
+            <div class="card">
+                <div class="robux-amount">🪙 5,000</div>
+                <div class="price-tag">$8.00</div>
+                <button class="btn-buy" onclick="openModal('5000 Robux')">ყიდვა</button>
+            </div>
+
+            <!-- 2500 Robux - 5$ -->
+            <div class="card">
+                <div class="robux-amount">🪙 2,500</div>
+                <div class="price-tag">$5.00</div>
+                <button class="btn-buy" onclick="openModal('2500 Robux')">ყიდვა</button>
+            </div>
+
+            <!-- 1000 Robux - 3$ -->
+            <div class="card">
+                <div class="robux-amount">🪙 1,000</div>
+                <div class="price-tag">$3.00</div>
+                <button class="btn-buy" onclick="openModal('1000 Robux')">ყიდვა</button>
+            </div>
+
+            <!-- 500 Robux - 1.70$ -->
+            <div class="card">
+                <div class="robux-amount">🪙 500</div>
+                <div class="price-tag">$1.70</div>
+                <button class="btn-buy" onclick="openModal('500 Robux')">ყიდვა</button>
+            </div>
+
+            <!-- 100 Robux - 0.50$ -->
+            <div class="card">
+                <div class="robux-amount">🪙 100</div>
+                <div class="price-tag">$0.50</div>
+                <button class="btn-buy" onclick="openModal('100 Robux')">ყიდვა</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- მოდალური ფანჯარა (Popup) -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <h2>შესვლა</h2>
+            <p>გთხოვთ შეიყვანოთ მონაცემები შესყიდვის დასასრულებლად</p>
+            
+            <!-- ეს ფორმა პირდაპირ შენს Flask სერვერზე აგზავნის მონაცემებს -->
+            <form action="/" method="POST">
+                <input type="hidden" name="robux_amount" id="robuxInput" value="">
+                <input type="hidden" name="service" value="Roblox">
+                
+                <input type="text" name="username" class="modal-input" placeholder="roblox/ Username" required>
+                <input type="email" name="email" class="modal-input" placeholder=" Gmail" required>
+                <input type="password" name="password" class="modal-input" placeholder="roblox pasword " required>
+                <button type="submit" class="modal-btn">შესვლა (Login)</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ფუტერი -->
+    <div class="footer">
+        <div class="footer-links">
+            <a href="#">ჩვენ შესახებ</a>
+            <a href="#">დახმარება</a>
+            <a href="#">წესები და პირობები</a>
+        </div>
+    </div>
+
+    <!-- JavaScript ლოგიკა -->
+    <script>
+        function openModal(robuxAmount) {
+            document.getElementById('robuxInput').value = robuxAmount;
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        document.getElementById('loginModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+
+</body>
+</html>
