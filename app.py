@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect
 import os
 from supabase import create_client, Client
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 # ⚠️ ეს ორი ხაზი შეავსე Supabase-დან აღებული მონაცემებით ⚠️
 SUPABASE_URL = "https://buqmhyvcxakfkjcgkxbt.supabase.co"
@@ -37,6 +37,6 @@ def index():
 
     return render_template('index.html')
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
